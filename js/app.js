@@ -1,3 +1,7 @@
+/* ==========================================================
+   KONEAT - APP ENGINE & CONFIGURATIONS LOGIC
+   ========================================================== */
+
 let currentUsername = 'eributtler';
 let userPosts = JSON.parse(localStorage.getItem('koneat_posts') || '[]');
 let userStories = JSON.parse(localStorage.getItem('koneat_stories') || '[]');
@@ -12,9 +16,29 @@ function setUsername(name) {
         const isPrivate = localStorage.getItem("koneat_private_account") === "true";
         profileTopName.textContent = name + (isPrivate ? " 🔒" : "");
     }
+    var msgUsername = document.getElementById('messagesCurrentUsername');
+    if(msgUsername) {
+        msgUsername.textContent = '@' + name;
+    }
 }
 
+/* ==========================================================
+   ROTEAMENTO SPA INTELIGENTE (COM SUPORTE A PRIVACIDADE/TERMOS E MENSAGENS)
+   ========================================================== */
+let legalReturnScreen = 'config';
+let blocksReturnScreen = 'atividades'; 
+let connectionsReturnScreen = 'perfil';
+
 function go(n) {
+    if (n === 'privacidade' || n === 'termos') {
+        const activeScreen = document.querySelector('.screen.active');
+        if (activeScreen && activeScreen.id === 'screen-perfil') {
+            legalReturnScreen = 'perfil';
+        } else {
+            legalReturnScreen = 'config';
+        }
+    }
+
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     var el = document.getElementById('screen-' + n);
     if (el) el.classList.add('active');
@@ -51,6 +75,87 @@ function go(n) {
         renderProfileGrid();
     } else if (n === 'video') {
         renderViralsFeed();
+    } else if (n === 'config') {
+        syncConfigUI();
+    } else if (n === 'informacoes-conta') {
+        syncAccountInfoUI();
+    } else if (n === 'atividades') {
+        syncActivitiesUI();
+    } else if (n === 'mensagens') {
+        const msgUser = document.getElementById('messagesCurrentUsername');
+        if(msgUser) msgUser.textContent = '@' + (currentUsername || 'eributtler');
+    }
+}
+
+function goBackFromLegal() {
+    go(legalReturnScreen || 'config');
+}
+
+function openFollowersScreen() {
+    connectionsReturnScreen = 'perfil';
+    const titleEl = document.getElementById('seguidoresUsernameTitle');
+    if(titleEl) titleEl.textContent = '@' + (currentUsername || 'koneat_user');
+    go('seguidores');
+}
+
+function openFollowingScreen() {
+    connectionsReturnScreen = 'perfil';
+    const titleEl = document.getElementById('seguindoUsernameTitle');
+    if(titleEl) titleEl.textContent = '@' + (currentUsername || 'koneat_user');
+    go('seguindo');
+}
+
+function openBloqueiosFrom(source) {
+    blocksReturnScreen = source || 'atividades';
+    go('bloqueios');
+}
+
+function goBackFromConnections() {
+    go(connectionsReturnScreen || 'perfil');
+}
+
+function goBackFromBlocks() {
+    go(blocksReturnScreen || 'atividades');
+}
+
+function switchBlockTab(evt, tabId) {
+    document.querySelectorAll('#screen-bloqueios .tab-conn-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('#screen-bloqueios .tab-content').forEach(content => {
+        content.classList.remove('active');
+        content.style.display = 'none';
+    });
+
+    evt.currentTarget.classList.add('active');
+    const target = document.getElementById(tabId);
+    if(target) {
+        target.classList.add('active');
+        target.style.display = 'block';
+    }
+}
+
+/* Lógica das abas da tela de Mensagens (Direct) */
+function switchMsgTab(evt, paneId) {
+    document.querySelectorAll('#screen-mensagens .tab-msg-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.fontWeight = '600';
+        btn.style.color = '#8e8e93';
+        btn.style.borderBottom = '2px solid transparent';
+    });
+
+    evt.currentTarget.classList.add('active');
+    evt.currentTarget.style.fontWeight = '700';
+    evt.currentTarget.style.color = '#000';
+    evt.currentTarget.style.borderBottom = '2px solid #000';
+
+    document.querySelectorAll('#screen-mensagens .tab-pane').forEach(pane => {
+        pane.classList.remove('active');
+        pane.style.display = 'none';
+    });
+
+    const target = document.getElementById(paneId);
+    if(target) {
+        target.classList.add('active');
+        target.style.display = 'block';
     }
 }
 
@@ -170,6 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProfileGrid();
     renderHomeFeed();
     renderStoriesBar();
+
+    initEditProfile();
+    initShareProfile();
 });
 
 let selectedType = 'post', lastScreen = 'perfil', lastSource = 'perfil';
@@ -178,11 +286,9 @@ let mediaFile = null, mediaType = 'image';
 function openCreate(type, source) {
     lastScreen = 'perfil';
     lastSource = source || 'perfil';
-    
     document.querySelectorAll('#screen-create .create-tab').forEach(t => {
         if(t.dataset.type === type) t.click();
     });
-
     go('create');
 }
 
@@ -574,4 +680,243 @@ if(signupForm) {
             go('perfil');
         }, 50);
     });
+}
+
+/* ==========================================================
+   MÓDULO DE CONFIGURAÇÕES E BOTTOM-SHEETS
+   ========================================================== */
+
+function syncConfigUI() {
+    const isPrivate = localStorage.getItem('koneat_private_account') === 'true';
+    const notifEnabled = localStorage.getItem('koneat_notifications') !== 'false';
+    const savedLang = localStorage.getItem('koneat_language') || 'Português (Brasil)';
+
+    const togglePrivate = document.getElementById('togglePrivate');
+    const subtitlePrivate = document.getElementById('subtitlePrivate');
+    const toggleNotif = document.getElementById('toggleNotif');
+    const subtitleIdioma = document.getElementById('subtitleIdioma');
+
+    if (togglePrivate) togglePrivate.checked = isPrivate;
+    if (subtitlePrivate) subtitlePrivate.textContent = isPrivate ? 'Privada' : 'Pública';
+    if (toggleNotif) toggleNotif.checked = notifEnabled;
+    if (subtitleIdioma) subtitleIdioma.textContent = savedLang;
+
+    document.querySelectorAll('#sheetIdioma .lang-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.lang === savedLang);
+    });
+}
+
+document.getElementById('togglePrivate')?.addEventListener('change', function () {
+    const isPriv = this.checked;
+    localStorage.setItem('koneat_private_account', isPriv ? 'true' : 'false');
+    const sub = document.getElementById('subtitlePrivate');
+    if (sub) sub.textContent = isPriv ? 'Privada' : 'Pública';
+    setUsername(currentUsername);
+    logActivity(isPriv ? 'Conta alterada para Privada' : 'Conta alterada para Pública');
+});
+
+document.getElementById('toggleNotif')?.addEventListener('change', function () {
+    localStorage.setItem('koneat_notifications', this.checked ? 'true' : 'false');
+    logActivity(this.checked ? 'Notificações ativadas' : 'Notificações desativadas');
+});
+
+document.getElementById('saveConfigBtn')?.addEventListener('click', () => {
+    logActivity('Configurações salvas');
+    alert('Alterações salvas com sucesso!');
+    go('perfil');
+});
+
+function openIdiomaSheet() {
+    document.getElementById('sheetIdioma')?.classList.add('show');
+}
+function closeIdiomaSheet() {
+    document.getElementById('sheetIdioma')?.classList.remove('show');
+}
+function selectIdioma(el) {
+    const lang = el.dataset.lang;
+    localStorage.setItem('koneat_language', lang);
+    document.querySelectorAll('#sheetIdioma .lang-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+    const sub = document.getElementById('subtitleIdioma');
+    if (sub) sub.textContent = lang;
+    logActivity('Idioma alterado para ' + lang);
+    setTimeout(closeIdiomaSheet, 180);
+}
+
+function openDeleteSheet() {
+    const input = document.getElementById('deletePasswordInput');
+    if (input) input.value = '';
+    document.getElementById('sheetDelete')?.classList.add('show');
+}
+function closeDeleteSheet() {
+    document.getElementById('sheetDelete')?.classList.remove('show');
+}
+function confirmAccountDeletion() {
+    const pass = document.getElementById('deletePasswordInput')?.value.trim();
+    if (!pass) {
+        alert('Digite sua senha ou PIN atual para confirmar.');
+        return;
+    }
+    localStorage.clear();
+    closeDeleteSheet();
+    alert('Conta excluída definitivamente.');
+    go('login');
+}
+
+function syncAccountInfoUI() {
+    const profileData = JSON.parse(localStorage.getItem('koneat_profile') || '{}');
+    const isPrivate = localStorage.getItem('koneat_private_account') === 'true';
+
+    document.getElementById('infoUsername').textContent = '@' + (profileData.username || currentUsername);
+    document.getElementById('infoName').textContent = profileData.name || 'Usuário Koneat';
+    document.getElementById('infoPrivacy').textContent = isPrivate ? 'Privada' : 'Pública';
+    document.getElementById('infoBirth').textContent = profileData.birth || 'Não informada';
+    document.getElementById('infoGender').textContent = profileData.gender || 'Não informado';
+}
+
+function syncActivitiesUI() {
+    const totalPosts = userPosts.length;
+    const totalReposts = userVirals.length;
+    document.getElementById('statPostsCount').textContent = totalPosts;
+    document.getElementById('statReposts').textContent = totalReposts;
+    document.getElementById('statInteractions').textContent = totalPosts + totalReposts;
+
+    const history = JSON.parse(localStorage.getItem('koneat_history') || 'null') || [
+        { text: 'Configurações de perfil atualizadas', date: 'Hoje' },
+        { text: 'Conta criada no Koneat', date: 'Recentemente' }
+    ];
+    const listEl = document.getElementById('historyList');
+    if (listEl) {
+        listEl.innerHTML = history.length === 0
+            ? '<div class="history-item"><span class="history-date">Nenhuma atividade registrada.</span></div>'
+            : history.map(h => `<div class="history-item"><span class="history-text">${h.text}</span><span class="history-date">${h.date}</span></div>`).join('');
+    }
+}
+
+function logActivity(text) {
+    const history = JSON.parse(localStorage.getItem('koneat_history') || '[]');
+    history.unshift({ text, date: 'Agora' });
+    localStorage.setItem('koneat_history', JSON.stringify(history.slice(0, 15)));
+}
+
+function clearActivityHistory() {
+    if (confirm('Deseja limpar todo o histórico de atividades?')) {
+        localStorage.setItem('koneat_history', '[]');
+        syncActivitiesUI();
+    }
+}
+
+/* ==========================================================
+   MÓDULO: EDITAR PERFIL E COMPARTILHAR PERFIL
+   ========================================================== */
+function initEditProfile() {
+  const editName = document.getElementById("editName");
+  const editUsername = document.getElementById("editUsername");
+  const editBio = document.getElementById("editBio");
+  const editBirth = document.getElementById("editBirth");
+  const editGender = document.getElementById("editGender");
+  const saveBtn = document.getElementById("saveProfileBtn");
+  if (!editName || !saveBtn) return;
+
+  editName.value = localStorage.getItem("koneat_name") || "";
+  editUsername.value = (localStorage.getItem("koneat_username") || "").replace("@","").toLowerCase();
+  editBio.value = localStorage.getItem("koneat_bio") || "";
+  if (editBirth) editBirth.value = localStorage.getItem("koneat_birth") || "";
+  if (editGender) editGender.value = localStorage.getItem("koneat_gender") || "";
+
+  function updateEditCounts() {
+    const c1 = document.getElementById("countContato");
+    const c2 = document.getElementById("countLink");
+    const c3 = document.getElementById("countLocal");
+    if (c1) c1.textContent = localStorage.getItem("koneat_whatsapp") ? "1" : "0";
+    if (c2) c2.textContent = localStorage.getItem("koneat_url_link") ? "1" : "0";
+    if (c3) c3.textContent = localStorage.getItem("koneat_localizacao") ? "1" : "0";
+  }
+  updateEditCounts();
+
+  saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.setItem("koneat_name", editName.value.trim());
+    localStorage.setItem("koneat_username", editUsername.value.trim().replace("@","").toLowerCase());
+    localStorage.setItem("koneat_bio", editBio.value.trim());
+    if (editBirth) localStorage.setItem("koneat_birth", editBirth.value.trim());
+    if (editGender) localStorage.setItem("koneat_gender", editGender.value.trim());
+
+    if (editUsername.value) setUsername(editUsername.value);
+    const profileNameEl = document.getElementById('profileName');
+    if(profileNameEl) profileNameEl.textContent = editName.value.trim();
+    const profileBioEl = document.getElementById('profileBio');
+    if(profileBioEl) profileBioEl.textContent = editBio.value.trim();
+
+    logActivity('Configurações de perfil atualizadas');
+    alert('Perfil atualizado com sucesso!');
+    go('perfil');
+  });
+
+  document.getElementById("btnOpenContato")?.addEventListener("click", () => {
+    const i = document.getElementById("inputWhatsapp");
+    if (i) i.value = localStorage.getItem("koneat_whatsapp") || "";
+    document.getElementById("modalContato")?.classList.add("show");
+  });
+  document.getElementById("btnOpenLink")?.addEventListener("click", () => {
+    const u = document.getElementById("inputUrlLink");
+    const t = document.getElementById("inputTitleLink");
+    if (u) u.value = localStorage.getItem("koneat_url_link") || "";
+    if (t) t.value = localStorage.getItem("koneat_title_link") || "";
+    document.getElementById("modalLink")?.classList.add("show");
+  });
+  document.getElementById("btnOpenLocal")?.addEventListener("click", () => {
+    const l = document.getElementById("inputLocalizacao");
+    if (l) l.value = localStorage.getItem("koneat_localizacao") || "";
+    document.getElementById("modalLocal")?.classList.add("show");
+  });
+  document.getElementById("btnOpenConfig")?.addEventListener("click", () => go("config"));
+
+  document.getElementById("btnSaveContato")?.addEventListener("click", () => {
+    const i = document.getElementById("inputWhatsapp");
+    localStorage.setItem("koneat_whatsapp", i ? i.value.trim() : "");
+    document.getElementById("modalContato")?.classList.remove("show");
+    updateEditCounts();
+  });
+  document.getElementById("btnSaveLink")?.addEventListener("click", () => {
+    const u = document.getElementById("inputUrlLink");
+    const t = document.getElementById("inputTitleLink");
+    localStorage.setItem("koneat_url_link", u ? u.value.trim() : "");
+    localStorage.setItem("koneat_title_link", t ? t.value.trim() : "");
+    document.getElementById("modalLink")?.classList.remove("show");
+    updateEditCounts();
+  });
+  document.getElementById("btnSaveLocal")?.addEventListener("click", () => {
+    const l = document.getElementById("inputLocalizacao");
+    localStorage.setItem("koneat_localizacao", l ? l.value.trim() : "");
+    document.getElementById("modalLocal")?.classList.remove("show");
+    updateEditCounts();
+  });
+}
+
+function initShareProfile() {
+  const btn = document.getElementById("btnShareProfile");
+  if (!btn) return;
+
+  btn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const username = (localStorage.getItem("koneat_username") || currentUsername || "erivelto777silva").replace("@","").trim();
+    const shareData = {
+      title: "Confira meu perfil no Koneat!",
+      text: "Confira meu perfil no Koneat!",
+      url: window.location.origin + window.location.pathname + "?u=" + username
+    };
+
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch (e) {}
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareData.text + " " + shareData.url);
+      alert("Link do perfil copiado!");
+    } catch (e) {
+      prompt("Copie o link do seu perfil:", shareData.url);
+    }
+  });
 }
