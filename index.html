@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>KONEΛT</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+<!-- ================= LOGIN ================= -->
+<section id="screen-login" class="screen dark auth active">
+<div class="logo"><h1>KONEΛT</h1><p>O COMEÇO</p></div>
+<div class="form"><form id="loginForm">
+<div class="field"><label>E-mail</label><div class="input"><input type="email" id="loginEmail" placeholder="Digite seu e-mail." required></div></div>
+<div class="field"><label>Senha</label><div class="input"><input type="password" id="loginPass" placeholder="Digite sua senha." required><button type="button" class="eye" id="toggleLogin"><svg id="eyeLogin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div></div>
+<button class="btn-main">ENTRAR →</button>
+</form><div class="divider"><span>Ou</span></div><button class="btn-google" id="btnGoogle">G &nbsp; Entrar com Google</button></div>
+<div class="links"><a onclick="go('cadastro')">Criar nova conta</a><span>•</span><a onclick="go('recuperar')">Recuperar acesso</a></div>
+<div class="copy">© 2027 Systendance.</div>
+</section>
+
+<!-- ================= CADASTRO ================= -->
+<section id="screen-cadastro" class="screen dark auth">
+<h2>CRIE SUA CONTA</h2><div class="form"><form id="signupForm">
+<div class="field"><label>Nome de usuário</label><div class="input"><input type="text" id="cadUser" placeholder="Digite seu @usuario" required></div></div>
+<div class="field"><label>E-mail</label><div class="input"><input type="email" id="cadEmail" placeholder="Digite seu e-mail" required></div></div>
+<div class="field"><label>Senha</label><div class="input"><input type="password" id="cadPass" placeholder="Digite sua senha" required><button type="button" class="eye" id="toggleCad"><svg id="eyeCad" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div></div>
+<button class="btn-main">CONTINUAR</button></form></div>
+<div class="links"><a onclick="go('login')">Já tem conta? Voltar ao Login</a></div>
+</section>
+
+<!-- ================= RECUPERAR ================= -->
+<section id="screen-recuperar" class="screen dark auth">
+<h2>RECUPERAR ACESSO</h2><div class="form"><form id="recoveryForm"><div class="field"><label>E-mail da conta</label><div class="input"><input type="email" id="recEmail" placeholder="Digite seu e-mail" required></div></div><button class="btn-main">ENVIAR CÓDIGO</button></form></div>
+<div class="links"><a onclick="go('login')">Voltar ao Login</a></div>
+</section>
+
+<!-- ================= HOME ================= -->
+<section id="screen-home" class="screen">
+<header class="home-header"><h1 class="home-logo">koneat</h1><div class="home-header-icons"><button class="icon-top-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button><button class="icon-top-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button></div></header>
+<div class="subnav-wrapper"><nav class="home-subnav-inner"><button class="subnav-tab active" data-home-tab="pra você">pra você</button><button class="subnav-tab" data-home-tab="seguindo">seguindo</button><button class="subnav-tab" data-home-tab="explorar">explorar</button><div class="subnav-indicator" id="subnavIndicator"></div></nav></div>
+<main class="home-feed">
+    <section class="stories-bar" id="storiesBar">
+        <div class="story-item" onclick="triggerStoryInput()">
+            <div class="story-avatar-wrap">
+                <div class="story-avatar" id="storyAvatar" style="border: 1.5px solid #000;"><svg viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                <div class="story-add-badge" onclick="event.stopPropagation(); triggerStoryInput();">+</div>
+            </div>
+            <span class="story-username">seu story</span>
+        </div>
+    </section>
+    <section id="postsDynamicFeed">
+        <div class="empty-home-feed" id="homeEmpty">Nenhuma publicação no momento.<br>Crie um post para começar!</div>
+    </section>
+</main>
+<nav class="nav"><button data-go="home"><svg viewBox="0 0 24 24"><path d="M12 2.8 L21 10.8 V20 a1 1 0 0 1 -1 1 H15 V14.6 a1 1 0 0 0 -1 -1 H10 a1 1 0 0 0 -1 1 V21 H4 a1 1 0 0 1 -1 -1 V10.8 Z"/></svg></button><button data-go="plus"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><button data-go="video"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 9l5 3-5 3z"/></svg></button><button data-go="perfil"><span class="nav-profile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3 3.5-5 8-5s8 2 8 5v1H4z"/></svg><img alt=""></span></button></nav>
+</section>
+
+<!-- ================= VÍDEO ================= -->
+<section id="screen-video" class="screen dark">
+<header class="video-header" id="videoHeader"><h1>Virais start</h1><div class="header-actions-right"><button class="icon-btn-top"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button><button class="icon-btn-top" id="menuDecisionsBtn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button></div></header>
+<main class="reels-feed" id="reelsContainer"><div class="empty-video" id="videoEmpty"><span>Vídeos virais aparecerão aqui</span></div></main>
+<nav class="nav"><button data-go="home"><svg viewBox="0 0 24 24"><path d="M12 2.8 L21 10.8 V20 a1 1 0 0 1 -1 1 H15 V14.6 a1 1 0 0 0 -1 -1 H10 a1 1 0 0 0 -1 1 V21 H4 a1 1 0 0 1 -1 -1 V10.8 Z"/></svg></button><button data-go="plus"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><button data-go="video"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 9l5 3-5 3z"/></svg></button><button data-go="perfil"><span class="nav-profile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3 3.5-5 8-5s8 2 8 5v1H4z"/></svg><img alt=""></span></button></nav>
+</section>
+
+<!-- ================= PERFIL ================= -->
+<section id="screen-perfil" class="screen">
+<header class="profile-header">
+    <div class="header-username" id="headerUsername">eributtler</div>
+    <div class="header-actions">
+        <div class="msg-bubble"><i></i><i></i><i></i></div>
+        <div style="position:relative">
+            <button id="menuBtn" style="background:none;border:none;color:#000;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></button>
+            <div class="dropdown" id="dropdownMenu">
+                <a href="#" onclick="go('config'); return false;">Configurações</a>
+                <a href="#" onclick="go('privacidade'); return false;">Política de Privacidade</a>
+                <a href="#" onclick="go('termos'); return false;">Termos e Políticas</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="p-head">
+    <div style="position:relative">
+        <div class="avatar" id="avatarBox"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="1.3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+        <div class="cam" onclick="document.getElementById('avatarInput').click()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>
+        <input type="file" id="avatarInput" accept="image/*" hidden>
+    </div>
+    <div class="stats"><div><b id="countPosts">0</b><span>posts</span></div><div><b>0</b><span>seguidores</span></div><div><b>0</b><span>seguindo</span></div></div>
+</div>
+
+<div class="user-details user-details-block"><p id="profileName" style="font-weight:700; font-size:15px; margin-bottom:2px;"></p><p id="profileBio"></p></div>
+<div class="p-actions"><button onclick="go('editar-perfil')">Editar perfil</button><button>Compartilhar perfil</button></div>
+
+<!-- ABAS COM SVGs E SETINHA DESLIZANTE -->
+<div class="p-tabs-wrapper">
+    <nav class="p-tabs">
+        <button class="tab-btn active" data-grid-tab="todos">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Todos</span>
+        </button>
+        <button class="tab-btn" data-grid-tab="reposts">
+            <svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <span>Reposts</span>
+        </button>
+        <button class="tab-btn" data-grid-tab="marcacoes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M16 19v-1a3 3 0 0 0-3-3h-2a3 3 0 0 0-3 3v1"/><circle cx="12" cy="9" r="3"/></svg>
+            <span>Marcações</span>
+        </button>
+    </nav>
+    <div class="p-tabs-indicator" id="profileTabIndicator"></div>
+</div>
+
+<!-- CONTEÚDO SCROLLÁVEL DO PERFIL -->
+<div class="profile-content-scroll" id="profileScrollContainer">
+    <div class="p-empty" id="perfilEmpty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="3"></circle><path d="M3.5 18c0-2.5 2.2-4 5-4s5 1.5 5 4"></path><circle cx="15.5" cy="8.5" r="3"></circle><path d="M15.5 14c2.8 0 5 1.5 5 4"></path></svg>
+        <h2 id="emptyMsgText">Crie seu primeiro post</h2>
+        <button class="btn-first" id="emptyBtnAction" onclick="openCreate('post','perfil')">Crie seu primeiro post</button>
+    </div>
+    <div class="grid" id="perfilGrid"></div>
+</div>
+
+<nav class="nav"><button data-go="home"><svg viewBox="0 0 24 24"><path d="M12 2.8 L21 10.8 V20 a1 1 0 0 1 -1 1 H15 V14.6 a1 1 0 0 0 -1 -1 H10 a1 1 0 0 0 -1 1 V21 H4 a1 1 0 0 1 -1 -1 V10.8 Z"/></svg></button><button data-go="plus"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg></button><button data-go="video"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 9l5 3-5 3z"/></svg></button><button data-go="perfil"><span class="nav-profile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3 3.5-5 8-5s8 2 8 5v1H4z"/></svg><img alt=""></span></button></nav>
+</section>
+
+<!-- ================= TELA: CONFIGURAÇÕES ================= -->
+<section id="screen-config" class="screen">
+    <header class="config-header">
+        <h1 class="config-title">Configurações</h1>
+        <button class="icon-btn" onclick="go('perfil')" style="background:none;border:none;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+    </header>
+    <main class="config-list">
+        <div class="config-card">
+            <div class="config-card-left">
+                <div class="icon-circle bg-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Notificações</span><span class="config-card-subtitle">Ativar • Desativar</span></div>
+            </div>
+            <label class="switch"><input type="checkbox" id="toggleNotif"><span class="slider"></span></label>
+        </div>
+        <div class="config-card">
+            <div class="config-card-left">
+                <div class="icon-circle bg-dark-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Conta privada • pública</span><span class="config-card-subtitle" id="subtitlePrivate">Pública</span></div>
+            </div>
+            <label class="switch"><input type="checkbox" id="togglePrivate"><span class="slider"></span></label>
+        </div>
+        <div class="config-card" id="btnOpenIdioma" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-globe"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Idioma</span><span class="config-card-subtitle" id="subtitleIdioma">Português (Brasil)</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" onclick="go('atividades')" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Ver minhas atividades</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" onclick="go('informacoes-conta')" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Informações da conta</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" onclick="go('privacidade')" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Privacidade</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" onclick="go('termos')" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Termos</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" id="btnOpenDelete" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
+                <div class="config-card-info"><span class="config-card-title danger">Deletar conta</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+        <div class="config-card" onclick="go('ajuda')" style="cursor:pointer;">
+            <div class="config-card-left">
+                <div class="icon-circle bg-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+                <div class="config-card-info"><span class="config-card-title">Ajuda</span><span class="config-card-subtitle">FAQ e Suporte</span></div>
+            </div>
+            <span class="settings-arrow">›</span>
+        </div>
+    </main>
+    <div style="padding: 16px;">
+        <button type="button" class="btn-save-blue" id="saveConfigBtn">Salvar alterações</button>
+    </div>
+</section>
+
+<!-- ================= TELA: ATIVIDADES ================= -->
+<section id="screen-atividades" class="screen">
+    <header class="activity-header">
+        <button class="icon-btn" onclick="go('config')" aria-label="Voltar" style="background:none;border:none;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <h1 class="activity-title">Minhas atividades</h1>
+    </header>
+    <main class="activity-container" style="overflow-y:auto; flex:1; padding:20px;">
+        <h2 class="section-title">Resumo da conta</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-number" id="statPostsCount">0</span><span class="stat-label">Publicações</span></div>
+            <div class="stat-card"><span class="stat-number" id="statInteractions">0</span><span class="stat-label">Total Interações</span></div>
+        </div>
+        <div style="margin-top:20px;">
+            <h2 class="section-title">Histórico de ações</h2>
+            <div class="history-list" id="historyList">
+                <div class="history-item"><div class="history-info"><span class="history-text">Configurações de perfil atualizadas</span><span class="history-date">Hoje</span></div></div>
+            </div>
+            <button type="button" class="btn-clear-history" id="btnClearHistory">Limpar histórico de atividades</button>
+        </div>
+    </main>
+</section>
+
+<!-- ================= TELA: INFORMAÇÕES DA CONTA ================= -->
+<section id="screen-informacoes-conta" class="screen">
+    <header class="account-info-header">
+        <button class="icon-btn" onclick="go('config')" aria-label="Voltar" style="background:none;border:none;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <h1 class="account-info-title">Informações da conta</h1>
+    </header>
+    <main class="account-info-container" style="overflow-y:auto; flex:1; padding:20px;">
+        <div class="info-card">
+            <div class="info-item"><span class="info-label">Nome de usuário</span><span class="info-value" id="infoUsername">@usuario</span></div>
+            <div class="info-divider"></div>
+            <div class="info-item"><span class="info-label">Nome da conta</span><span class="info-value" id="infoName">Usuário Koneat</span></div>
+            <div class="info-divider"></div>
+            <div class="info-item"><span class="info-label">Privacidade da conta</span><span class="info-value" id="infoPrivacy">Pública</span></div>
+            <div class="info-divider"></div>
+            <div class="info-item"><span class="info-label">Data de nascimento</span><span class="info-value" id="infoBirth">Não informada</span></div>
+            <div class="info-divider"></div>
+            <div class="info-item"><span class="info-label">Gênero</span><span class="info-value" id="infoGender">Não informado</span></div>
+        </div>
+    </main>
+</section>
+
+<!-- ================= TELA: CENTRAL DE AJUDA ================= -->
+<section id="screen-ajuda" class="screen">
+    <header class="help-header">
+        <button class="icon-btn" onclick="go('config')" aria-label="Voltar" style="background:none;border:none;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <h1 class="help-title">Central de Ajuda</h1>
+    </header>
+    <main class="help-container" style="overflow-y:auto; flex:1; padding:20px;">
+        <h2 class="help-section-title">Perguntas Frequentes</h2>
+        <div class="faq-card">
+            <div class="faq-item"><span class="faq-question">Como editar as informações do meu perfil?</span><span class="faq-answer">Acesse a aba do seu Perfil e clique em "Editar Perfil".</span></div>
+        </div>
+    </main>
+</section>
+
+<!-- ================= TELA: POLÍTICA DE PRIVACIDADE ================= -->
+<section id="screen-privacidade" class="screen">
+    <div class="legal-container" style="overflow-y:auto; flex:1; padding:20px;">
+        <header class="legal-header">
+            <button class="icon-btn" onclick="go('config')" aria-label="Voltar" style="background:none;border:none;cursor:pointer;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <h1 class="legal-title">Política de Privacidade</h1>
+        </header>
+        <section class="legal-section">
+            <h2>POLÍTICA DE PRIVACIDADE — KONEAT WORD</h2>
+            <p>O KONEAT Word respeita a privacidade dos usuários e busca tratar seus dados de forma segura sob a LGPD.</p>
+        </section>
+    </div>
+</section>
+
+<!-- ================= TELA: TERMOS E POLÍTICAS ================= -->
+<section id="screen-termos" class="screen">
+    <div class="legal-container" style="overflow-y:auto; flex:1; padding:20px;">
+        <header class="legal-header">
+            <button class="icon-btn" onclick="go('config')" aria-label="Voltar" style="background:none;border:none;cursor:pointer;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <h1 class="legal-title">Termos e Políticas</h1>
+        </header>
+        <section class="legal-section">
+            <h2>TERMOS DE USO — KONEAT WORD</h2>
+            <p>Bem-vindo ao KONEAT Word. Ao utilizar a plataforma, você concorda com nossos termos.</p>
+        </section>
+    </div>
+</section>
+
+<!-- ================= TELA: EDITAR PERFIL ================= -->
+<section id="screen-editar-perfil" class="screen">
+    <header class="config-header">
+        <h1 class="config-title">Editar Perfil</h1>
+        <button class="icon-btn" onclick="go('perfil')" style="background:none;border:none;cursor:pointer;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+    </header>
+    <main style="padding:20px; display:flex; flex-direction:column; gap:14px; flex:1; overflow-y:auto;">
+        <div class="field"><label style="color:#000;">Nome</label><div class="input" style="border-color:#ccc;"><input type="text" id="editName" placeholder="Seu nome" style="color:#000;"></div></div>
+        <div class="field"><label style="color:#000;">Nome de usuário</label><div class="input" style="border-color:#ccc;"><input type="text" id="editUsername" placeholder="@usuario" style="color:#000;"></div></div>
+        <div class="field"><label style="color:#000;">Biografia</label><div class="input" style="border-color:#ccc;"><input type="text" id="editBio" placeholder="Sua bio" style="color:#000;"></div></div>
+        <div class="field"><label style="color:#000;">Data de nascimento</label><div class="input" style="border-color:#ccc;"><input type="date" id="editBirth" style="color:#000;"></div></div>
+        <div class="field"><label style="color:#000;">Gênero</label><div class="input" style="border-color:#ccc;"><input type="text" id="editGender" placeholder="Ex: Masculino, Feminino" style="color:#000;"></div></div>
+        <button type="button" class="btn-main" id="saveProfileBtn" style="background:#0066ff; color:#fff;">Salvar Perfil</button>
+    </main>
+</section>
+
+<!-- ================= TELA 1: CRIAR (EXCLUSIVO PERFIL: TELA CHEIA COM CÂMERA) ================= -->
+<section id="screen-create" class="screen dark create-screen">
+<header class="create-header">
+    <button class="close-link" onclick="closeCreate()">X</button>
+    <nav class="create-tabs" id="createTabsNav">
+        <button class="create-tab active" data-type="post">POST</button>
+        <button class="create-tab" data-type="story">STORY</button>
+        <button class="create-tab" data-type="viral">VIRAL</button>
+        <div class="create-tab-indicator" id="createTabIndicator"></div>
+    </nav>
+    <div class="top-right-icons">
+        <button class="circle-icon-btn" onclick="document.getElementById('postInput').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="14" height="14" rx="2"/><rect x="7" y="7" width="14" height="14" rx="2"/></svg></button>
+        <button class="circle-icon-btn" onclick="document.getElementById('cameraInput').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></button>
+    </div>
+</header>
+<section class="create-subbar" id="topAdvanceBar">
+    <button class="gallery-select" onclick="document.getElementById('postInput').click()">Galeria <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+    <button class="btn-avancar" id="advanceButton">Avançar</button>
+</section>
+<main class="media-area" id="previewContainer">
+    <div class="empty-state" id="emptyState">
+        <!-- SVG da Câmera -->
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <p id="previewText">Adicionar imagem ou vídeo feed</p>
+    </div>
+    <img id="imagePreview" class="media-preview">
+    <video id="videoPreview" class="media-preview" controls playsinline></video>
+</main>
+<div class="create-bottom-bar" id="bottomAdvanceBar"><button class="btn-avancar-pill" id="advanceButtonBottom">Avançar</button></div>
+</section>
+
+<!-- ================= TELA 2: PLUS (COM BARRA INFERIOR, SVG DA GALERIA E BOTÃO AVANÇAR ABAIXO) ================= -->
+<section id="screen-plus" class="screen dark create-screen">
+<header class="create-header">
+    <button class="close-link" onclick="go('home')">X</button>
+    <nav class="create-tabs" id="plusTabsNav">
+        <button class="create-tab active" data-type="post">POST</button>
+        <button class="create-tab" data-type="story">STORY</button>
+        <button class="create-tab" data-type="viral">VIRAL</button>
+        <div class="create-tab-indicator" id="plusTabIndicator"></div>
+    </nav>
+    <div class="top-right-icons">
+        <button class="circle-icon-btn" onclick="document.getElementById('postInput').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="14" height="14" rx="2"/><rect x="7" y="7" width="14" height="14" rx="2"/></svg></button>
+        <button class="circle-icon-btn" onclick="document.getElementById('cameraInput').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></button>
+    </div>
+</header>
+<section class="create-subbar">
+    <button class="gallery-select" onclick="document.getElementById('postInput').click()">Galeria <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+</section>
+<main class="media-area" id="plusPreviewContainer">
+    <div class="empty-state">
+        <!-- SVG idêntico à sua imagem: dois quadradinhos de galeria sobrepostos -->
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 7h10v10"/><path d="M10.5 13.5l2-2 3 3"/></svg>
+        <p id="plusPreviewText">Faça um post no feed</p>
+    </div>
+    <img id="plusImagePreview" class="media-preview">
+    <video id="plusVideoPreview" class="media-preview" controls playsinline></video>
+</main>
+<!-- Botão Avançar em formato de pílula embaixo, exatamente como na sua imagem -->
+<div class="create-bottom-bar" style="margin-bottom: 70px; display:flex; justify-content:center;"><button class="btn-avancar-pill" id="plusAdvanceBtn" style="background:#fff; color:#000; font-weight:600; padding:12px 36px; border-radius:24px; border:none; cursor:pointer;">Avançar</button></div>
+
+<!-- Barra de navegação inferior visível na aba Plus -->
+<nav class="nav">
+    <button data-go="home"><svg viewBox="0 0 24 24"><path d="M12 2.8 L21 10.8 V20 a1 1 0 0 1 -1 1 H15 V14.6 a1 1 0 0 0 -1 -1 H10 a1 1 0 0 0 -1 1 V21 H4 a1 1 0 0 1 -1 -1 V10.8 Z"/></svg></button>
+    <button data-go="plus" class="on"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="#fff" stroke="#fff"/><path d="M12 8v8M8 12h8" stroke="#111"/></svg></button>
+    <button data-go="video"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M10 9l5 3-5 3z"/></svg></button>
+    <button data-go="perfil"><span class="nav-profile"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 20c0-3 3.5-5 8-5s8 2 8 5v1H4z"/></svg><img alt=""></span></button>
+</nav>
+</section>
+
+<!-- INPUTS DE ARQUIVO GLOBAIS -->
+<input type="file" id="postInput" accept="image/*,video/*" hidden>
+<input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+<input type="file" id="storyDirectInput" accept="image/*,video/*" hidden>
+
+<!-- ================= MODAL DE LEGENDA ================= -->
+<section id="screen-caption" class="screen dark caption-screen">
+<div class="caption-header"><button class="btn-back" id="closeModalBtn">Voltar</button><h2 id="modalCaptionTitle">Nova publicação</h2><button class="btn-publish" id="publishBtn">Compartilhar</button></div><div class="caption-body"><img id="modalThumb" class="caption-thumb"><textarea id="captionInput" class="caption-text" placeholder="Escreva uma legenda..."></textarea></div>
+</section>
+
+<div class="loading" id="loadingOverlay"><div class="loading-box"><div class="spinner"></div><span style="font-size:15px;font-weight:600;color:#fff" id="loadingText">Sua publicação está sendo postada</span></div></div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
